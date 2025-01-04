@@ -24,6 +24,24 @@ class StudioInfoModel {
         description: "Specializing in urban and street dance styles, this studio provides breakdancing, hip-hop, and popping classes, along with fitness dance programs like Zumba and Afrobeat.")
     );
 
+    studiosInfo.add(
+      StudioInfoModel(name: "Harmony Arts Collective", 
+        address: "78 Harmony Avenue, Serenaville, TX 73301", 
+        description: "Offering ballet, jazz, and modern dance classes, this studio also incorporates yoga and Pilates into its curriculum to promote holistic movement training.")
+    );
+
+    studiosInfo.add(
+      StudioInfoModel(name: "Velocity Performing Arts Center", 
+        address: "12 Energy Drive, Momentum City, IL 60601", 
+        description: "A state-of-the-art facility that teaches ballet, tap, jazz, and musical theater, as well as choreography workshops for aspiring dancers.")
+    );
+
+    studiosInfo.add(
+      StudioInfoModel(name: "Groove Dynamics Studio", 
+        address: "67 Rhythm Road, Flowtown, FL 33101", 
+        description: "Known for its vibrant atmosphere, this studio offers classes in hip-hop, K-pop choreography, and freestyle dance, with a focus on building confidence and creativity.")
+    );
+
     return studiosInfo;
   }
 }
