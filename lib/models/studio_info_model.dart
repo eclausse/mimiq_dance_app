@@ -15,7 +15,7 @@ class StudioInfoModel {
     studiosInfo.add(
       StudioInfoModel(name: "Eclipse Dance Academy", 
         address: "123 Crescent Lane, Starville, NY 10001", 
-        description: "his studio offers ballet, hip-hop, contemporary, and salsa dance classes for all ages. It features spacious studios, expert instructors, and an inclusive environment.")
+        description: "This studio offers ballet, hip-hop, contemporary, and salsa dance classes for all ages. It features spacious studios, expert instructors, and an inclusive environment.")
     );
 
     studiosInfo.add(

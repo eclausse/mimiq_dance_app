@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mimiq_dance/widgets/studio_info_page.dart';
+import 'package:mimiq_dance/views/studio_info_page.dart';
 
 import '../models/studio_info_model.dart';
 
@@ -29,7 +29,7 @@ class StudioInfo extends StatelessWidget {
       ),
       onTap: () => {
         Navigator.of(context).push(
-          MaterialPageRoute(builder: (context) => StudioInfoPage(studioModel: studioModel))
+          MaterialPageRoute(builder: (context) => StudioInfoView(studioModel: studioModel))
         )
       },
     );
