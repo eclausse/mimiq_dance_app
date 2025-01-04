@@ -17,6 +17,14 @@ class HomeView extends StatelessWidget {
     _getStudioInfo();
 
     return Scaffold(
+      backgroundColor: Colors.deepPurple.shade300,
+      appBar: AppBar(
+        title: const Center(
+          child: Text("Dance Studio Application Demo"),
+        ),
+        backgroundColor: Colors.deepPurple,
+        foregroundColor: Colors.white,
+      ),
       body: ListView.builder(
         itemCount: studios.length,
         itemBuilder: (context, index) {
