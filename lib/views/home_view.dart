@@ -20,21 +20,9 @@ class HomeView extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.deepPurple.shade300,
       appBar: AppBar(
-        title: Stack(
-          children: [
-            const Align(
+        title: const Center(
               child: Text("Dance Studio Application Demo"),
             ),
-            Positioned(
-              right: 0,
-              child: GestureDetector(
-                child: const Text("Map"),
-                onTap: () => {
-                  Navigator.of(context).push( MaterialPageRoute(builder: (context) => MapView()))
-                  }
-                )
-              )
-          ]),
         backgroundColor: Colors.deepPurple,
         foregroundColor: Colors.white,
       ),
