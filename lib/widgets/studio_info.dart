@@ -13,7 +13,20 @@ class StudioInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      child: Text(studioModel.name),
+      child: Padding(
+        padding: const EdgeInsets.only(
+          top: 20,
+          bottom: 0,
+          left: 20,
+          right: 20,
+        ),
+        child: Card(
+          child: SizedBox(
+            height: 100,
+            child: Center(child: Text(studioModel.name)),
+          ),
+        ),
+      ),
       onTap: () => {
         Navigator.of(context).push(
           MaterialPageRoute(builder: (context) => StudioInfoPage(studioModel: studioModel))
