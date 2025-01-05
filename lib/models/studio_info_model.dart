@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:mimiq_dance/models/studio_category_model.dart';
 
 class StudioInfoModel {
@@ -5,52 +7,28 @@ class StudioInfoModel {
   String address;
   String description;
   StudioCategory category;
+  LatLng localisation;
 
   StudioInfoModel({
     required this.name,
     required this.address,
     required this.description,
     required this.category,
+    required this.localisation
   });
 
-  static List<StudioInfoModel> getStudiosInfo() {
+  static Future<List<StudioInfoModel>> getStudiosInfo() async {
     List<StudioInfoModel> studiosInfo = [];
 
-    studiosInfo.add(
-      StudioInfoModel(name: "Eclipse Dance Academy", 
-        address: "123 Crescent Lane, Starville, NY 10001", 
-        description: "This studio offers ballet classes for all ages. It features spacious studios, expert instructors, and an inclusive environment.",
-        category: StudioCategory.ballet)
+    await FirebaseFirestore.instance.collection('studio').get().then(
+        (snapshot) => snapshot.docs.forEach(
+          (element) {
+            Map<String, dynamic> data = element.data();
+            LatLng loc = LatLng(data['latitude'], data['longitude']);
+            StudioInfoModel studio = StudioInfoModel(name: data['name'], address: data['address'], description: data['description'], category: StudioCategory.values.firstWhere((e) => e.toString() == 'StudioCategory.' + data['category']), localisation: loc);
+            studiosInfo.add(studio);
+          })
     );
-
-    studiosInfo.add(
-      StudioInfoModel(name: "Rhythm & Motion Studio", 
-        address: "45 Groove Street, Beatown, CA 90210", 
-        description: "Specializing in urban and street dance styles, this studio provides freestyle classes, along with fitness dance programs.",
-        category: StudioCategory.freestyle)
-    );
-
-    studiosInfo.add(
-      StudioInfoModel(name: "Harmony Arts Collective", 
-        address: "78 Harmony Avenue, Serenaville, TX 73301", 
-        description: "Offering jazz classes, this studio also incorporates yoga and Pilates into its curriculum to promote holistic movement training.",
-        category: StudioCategory.jazz)
-    );
-
-    studiosInfo.add(
-      StudioInfoModel(name: "Velocity Performing Arts Center", 
-        address: "12 Energy Drive, Momentum City, IL 60601", 
-        description: "A state-of-the-art facility that teaches ballet, as well as choreography workshops for aspiring dancers.",
-        category: StudioCategory.ballet)
-    );
-
-    studiosInfo.add(
-      StudioInfoModel(name: "Groove Dynamics Studio", 
-        address: "67 Rhythm Road, Flowtown, FL 33101", 
-        description: "Known for its vibrant atmosphere, this studio offers classes in freestyle dance, with a focus on building confidence and creativity.",
-        category: StudioCategory.freestyle)
-    );
-
     return studiosInfo;
   }
 }

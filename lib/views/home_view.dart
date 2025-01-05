@@ -17,13 +17,12 @@ class _HomeViewState extends State<HomeView> {
   String _searchQuery = '';
 
   List<StudioCategory> _allCategories = [];
-  List<DropdownMenuEntry> _allCategoriesEntry = [];
+  final List<DropdownMenuEntry> _allCategoriesEntry = [];
   String _categorySelected= 'none';
 
   @override
   void initState() {
-    _allStudios = StudioInfoModel.getStudiosInfo();
-    _foundStudios = List.from(_allStudios);
+    _fetchStudioData();
 
     _allCategories = StudioCategoryModel.getAllStudioCategory();
 
@@ -32,6 +31,14 @@ class _HomeViewState extends State<HomeView> {
     _allCategoriesEntry.addAll(_allCategories.map((e) => DropdownMenuEntry(value: e.name, label: e.name)).toList());
 
     super.initState();
+  }
+
+  void _fetchStudioData() async {
+      List<StudioInfoModel> data = await StudioInfoModel.getStudiosInfo();
+      setState(() {
+        _allStudios = data;
+        _foundStudios = List.from(_allStudios);
+      });
   }
 
   void _updateSearchQuery(String enteredKeyword) {

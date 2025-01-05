@@ -1,24 +1,47 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:mimiq_dance/models/studio_info_model.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:mimiq_dance/views/studio_info_page.dart';
 
-class MapView extends StatelessWidget {
-  MapView({super.key});
+class MapView extends StatefulWidget {
+  const MapView({super.key});
 
-  List<StudioInfoModel> studios = [];
+  @override
+  State<MapView> createState() => _MapViewState();
+}
 
-  void _getStudioInfo() {
-    studios = StudioInfoModel.getStudiosInfo();
+class _MapViewState extends State<MapView> {
+  Set<Marker> _markers = {};
+
+  @override
+  void initState() {
+    _getStudioLocalisation();
+    super.initState();
+  }
+
+  void _getStudioLocalisation() async {
+    List<StudioInfoModel> fetchedData = await StudioInfoModel.getStudiosInfo();
+    Set<Marker> markers = {};
+
+    for (var e in fetchedData) {
+      markers.add(
+              Marker(
+                markerId: MarkerId(e.name),
+                position: e.localisation,
+              ),);
+    }
+              
+    setState(() {
+      _markers = markers;
+    });
   }
 
   final LatLng _center = const LatLng(41.850033, -87.6500523);
   
   @override
   Widget build(BuildContext context) {
-    // Get the list of studios
-    _getStudioInfo();
-
     return Scaffold(
       backgroundColor: Colors.deepPurple.shade300,
       appBar: AppBar(
@@ -33,37 +56,7 @@ class MapView extends StatelessWidget {
           target: _center,
           zoom: 5.0,
         ),
-        markers: {
-          Marker(
-               markerId: MarkerId(studios[0].name),
-               position: const LatLng(42.714040,-82.589822),
-               onTap: () => {
-                Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => StudioInfoView(studioModel: studios[0]))
-                )
-              }
-            ), 
-          Marker(
-            markerId: MarkerId(studios[2].name),
-            position: const LatLng(42.792011,-90.882680),
-            onTap: () => {
-              Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => StudioInfoView(studioModel: studios[2]))
-              )
-            }
-          ), 
-          Marker(
-              markerId: MarkerId(studios[3].name),
-              position: const LatLng(35.197642,-80.787244),
-              onTap: () => {
-              Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => StudioInfoView(studioModel: studios[3]))
-              )
-            }
-            ),
-          
-      }, // markers
-
+        markers: _markers,
       )
     );
   }

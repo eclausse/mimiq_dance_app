@@ -3,7 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:mimiq_dance/views/home_view.dart';
 import 'package:mimiq_dance/views/map_view.dart';
 
-void main() {
+import 'package:firebase_core/firebase_core.dart';
+
+import 'firebase_options.dart';
+
+
+void main() async {
+
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+);
+
   runApp(const MyApp());
 }
 
@@ -34,7 +44,7 @@ class _MyAppState extends State<MyApp> {
       ),
       home: Scaffold(
         body: [
-          HomeView(),
+          const HomeView(),
           MapView(),
         ][_currentIndex],
         bottomNavigationBar: BottomNavigationBar(
