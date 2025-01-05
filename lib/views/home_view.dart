@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mimiq_dance/models/studio_category_model.dart';
 import 'package:mimiq_dance/models/studio_info_model.dart';
 import 'package:mimiq_dance/views/map_view.dart';
 import 'package:mimiq_dance/widgets/studio_info.dart';
@@ -13,18 +14,36 @@ class HomeView extends StatefulWidget {
 class _HomeViewState extends State<HomeView> {
   List<StudioInfoModel> _allStudios = [];
   List<StudioInfoModel> _foundStudios = [];
-  String searchQuery = '';
+  String _searchQuery = '';
+
+  List<StudioCategory> _allCategories = [];
+  List<DropdownMenuEntry> _allCategoriesEntry = [];
+  String _categorySelected= 'none';
 
   @override
   void initState() {
     _allStudios = StudioInfoModel.getStudiosInfo();
     _foundStudios = List.from(_allStudios);
+
+    _allCategories = StudioCategoryModel.getAllStudioCategory();
+
+    // Process StudioCategory as Entry
+    _allCategoriesEntry.add(const DropdownMenuEntry(value: "none", label: "No selection"));
+    _allCategoriesEntry.addAll(_allCategories.map((e) => DropdownMenuEntry(value: e.name, label: e.name)).toList());
+
     super.initState();
   }
 
   void _updateSearchQuery(String enteredKeyword) {
     setState(() {
-      searchQuery = enteredKeyword;
+      _searchQuery = enteredKeyword;
+    });
+    _runFilter();
+  }
+
+  void _updateCategory(String categorySelected) {
+    setState(() {
+      _categorySelected = categorySelected;
     });
     _runFilter();
   }
@@ -34,7 +53,9 @@ class _HomeViewState extends State<HomeView> {
 
     result = _allStudios
                 .where((element) => 
-                  element.name.toLowerCase().contains(searchQuery.toLowerCase()),)
+                  element.category.name == _categorySelected || _categorySelected == "none")
+                .where((element) => 
+                  element.name.toLowerCase().contains(_searchQuery.toLowerCase()),)
                 .toList();
     
     setState(() {
@@ -57,12 +78,32 @@ class _HomeViewState extends State<HomeView> {
         padding: const EdgeInsets.all(10.0),
         child: Column(
           children: [
-            TextField(
-              onChanged: (value) => _updateSearchQuery(value),
-              decoration: const InputDecoration(
-                labelText: "Search",
-                suffixIcon: Icon(Icons.search),
+            Padding(
+              padding: const EdgeInsets.only(
+                left: 50,
+                right: 50,
               ),
+              child: Row(
+                children: [
+                  Expanded(
+                    flex: 4,
+                    child: TextField(
+                      onChanged: (value) => _updateSearchQuery(value),
+                      decoration: const InputDecoration(
+                        labelText: "Search",
+                        suffixIcon: Icon(Icons.search),
+                    )),
+                  ),
+                  Expanded(
+                    flex: 1,
+                    child: DropdownMenu(
+                      hintText: "Choose a category",
+                      dropdownMenuEntries: _allCategoriesEntry,
+                      onSelected: (value) => _updateCategory(value),
+                    ),
+                  )
+                ]
+              )
             ),
             Expanded(
               child: ListView.builder(
