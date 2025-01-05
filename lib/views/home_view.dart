@@ -87,29 +87,37 @@ class _HomeViewState extends State<HomeView> {
           children: [
             Padding(
               padding: const EdgeInsets.only(
-                left: 50,
-                right: 50,
+                left: 300,
+                right: 300,
               ),
-              child: Row(
-                children: [
-                  Expanded(
-                    flex: 4,
-                    child: TextField(
-                      onChanged: (value) => _updateSearchQuery(value),
-                      decoration: const InputDecoration(
-                        labelText: "Search",
-                        suffixIcon: Icon(Icons.search),
-                    )),
-                  ),
-                  Expanded(
-                    flex: 1,
-                    child: DropdownMenu(
-                      hintText: "Choose a category",
-                      dropdownMenuEntries: _allCategoriesEntry,
-                      onSelected: (value) => _updateCategory(value),
-                    ),
+              child: Container(
+                decoration: const BoxDecoration(color: Colors.white),
+                child: Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        flex: 4,
+                        child: TextField(
+                          onChanged: (value) => _updateSearchQuery(value),
+                          decoration: const InputDecoration(
+                            labelText: "Search",
+                            border: OutlineInputBorder(),
+                            suffixIcon: Icon(Icons.search),
+                        )),
+                      ),
+                      const SizedBox(width: 50),
+                      Expanded(
+                        flex: 1,
+                        child: DropdownMenu(
+                          hintText: "Choose a category",
+                          dropdownMenuEntries: _allCategoriesEntry,
+                          onSelected: (value) => _updateCategory(value),
+                        ),
+                      )
+                    ]
                   )
-                ]
+                )
               )
             ),
             Expanded(
