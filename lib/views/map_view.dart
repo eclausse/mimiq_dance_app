@@ -30,6 +30,11 @@ class _MapViewState extends State<MapView> {
               Marker(
                 markerId: MarkerId(e.name),
                 position: e.localisation,
+                onTap: () => {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => StudioInfoView(studioModel: e))
+                  )
+                },
               ),);
     }
               
