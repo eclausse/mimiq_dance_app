@@ -3,20 +3,47 @@ import 'package:mimiq_dance/models/studio_info_model.dart';
 import 'package:mimiq_dance/views/map_view.dart';
 import 'package:mimiq_dance/widgets/studio_info.dart';
 
-class HomeView extends StatelessWidget {
-  HomeView({super.key});
+class HomeView extends StatefulWidget {
+  const HomeView({super.key});
 
-  List<StudioInfoModel> studios = [];
+  @override
+  State<HomeView> createState() => _HomeViewState();
+}
 
-  void _getStudioInfo() {
-    studios = StudioInfoModel.getStudiosInfo();
+class _HomeViewState extends State<HomeView> {
+  List<StudioInfoModel> _allStudios = [];
+  List<StudioInfoModel> _foundStudios = [];
+  String searchQuery = '';
+
+  @override
+  void initState() {
+    _allStudios = StudioInfoModel.getStudiosInfo();
+    _foundStudios = List.from(_allStudios);
+    super.initState();
+  }
+
+  void _updateSearchQuery(String enteredKeyword) {
+    setState(() {
+      searchQuery = enteredKeyword;
+    });
+    _runFilter();
+  }
+
+  void _runFilter() {
+    List<StudioInfoModel> result = [];
+
+    result = _allStudios
+                .where((element) => 
+                  element.name.toLowerCase().contains(searchQuery.toLowerCase()),)
+                .toList();
+    
+    setState(() {
+      _foundStudios = result;
+    });
   }
   
   @override
   Widget build(BuildContext context) {
-    // Get the list of studios
-    _getStudioInfo();
-
     return Scaffold(
       backgroundColor: Colors.deepPurple.shade300,
       appBar: AppBar(
@@ -26,12 +53,26 @@ class HomeView extends StatelessWidget {
         backgroundColor: Colors.deepPurple,
         foregroundColor: Colors.white,
       ),
-      body: ListView.builder(
-        itemCount: studios.length,
-        itemBuilder: (context, index) {
-          return StudioInfo(studioModel: studios[index]);
-        }
-      ),
+      body: Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: Column(
+          children: [
+            TextField(
+              onChanged: (value) => _updateSearchQuery(value),
+              decoration: const InputDecoration(
+                labelText: "Search",
+                suffixIcon: Icon(Icons.search),
+              ),
+            ),
+            Expanded(
+              child: ListView.builder(
+                itemCount: _foundStudios.length,
+                itemBuilder: (context, index) {
+                  return StudioInfo(studioModel: _foundStudios[index]);
+                })
+            )
+          ]),
+      ), 
     );
   }
 }
